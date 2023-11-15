@@ -1,7 +1,7 @@
 require 'digest/md5'
 module Spree
   class Gateway::Przelewy24Controller < Spree::BaseController
-    skip_before_filter :verify_authenticity_token, :only => [:comeback, :complete]
+    skip_before_action :verify_authenticity_token, :only => [:comeback, :complete, :error]
     include Spree::Core::ControllerHelpers::Order
     helper 'spree/store'
 

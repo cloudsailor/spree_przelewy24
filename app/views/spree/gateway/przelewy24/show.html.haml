@@ -9,7 +9,7 @@
       %ol.progress-steps#checkout-step-payment
         %li.completed-first
           %span
-            %a{:href => "/checkout/address"} 
+            %a{:href => "/checkout/address"}
               Adres
         %li.completed
           %span
@@ -21,7 +21,7 @@
         %li.next-last
           %span
             Kompletne
-  
+
   %div{:class => "row", :"data-hook" => "checkout_content"}
     %div{:class => "columns alpha twelve", :"data-hook" => "checkout_form_wrapper"}
       =# form_for @order, :url => update_checkout_path(@order.state), :html => { :id => "checkout_form_#{@order.state}" } do |form|
@@ -43,19 +43,17 @@
           = hidden_field_tag 'p24_kraj', @bill_address.country.iso3
           = hidden_field_tag 'p24_email', (@order.email || @order.user.try(:email))
           = hidden_field_tag 'p24_return_url_ok', gateway_przelewy24_comeback_url(:gateway_id => @gateway.id,:order_id => @order.id)
-          = hidden_field_tag 'p24_return_url_error', gateway_przelewy24_error_url(:gateway_id => @gateway.id,:order_id => @order.id)
-          = hidden_field_tag 'p24_opis', "#{Spree::Config[:site_name]} Order: #{@order.number}"
+          = hidden_field_tag 'p24_return_url_error', gateway_post_przelewy24_error_url(:gateway_id => @gateway.id,:order_id => @order.id)
+          = hidden_field_tag 'p24_opis', "YES ! Order: #{@order.number}"
           = hidden_field_tag 'p24_language', @gateway.preferred_p24_language
           = hidden_field_tag 'p24_crc', @p24_crc
-          
+
         %div{:class => "form-buttons", :"data-hook" => "buttons"}
           = submit_tag t(:przelewy24_payment), :class => 'continue button primary'
           :javascript
             disableSaveOnClick();
-      
+
     %br.space
-    
+
     %div{:id => "checkout-summary", :"data-hook" => "checkout_summary_box", :class => "columns omega four"}
       = render :partial => 'spree/checkout/summary', :locals => { :order => @order }
-
-    

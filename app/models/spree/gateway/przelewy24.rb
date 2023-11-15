@@ -1,6 +1,5 @@
 module Spree
-  class PaymentMethod::Przelewy24 < PaymentMethod
-
+  class Gateway::Przelewy24 < PaymentMethod
 
     #attr_accessible :preferred_test_mode, :preferred_url, :preferred_url_transakcja, :preferred_test_url, :preferred_crc_key, :preferred_p24_language, :preferred_test_url_transakcja, :preferred_p24_return_url_error, :preferred_p24_return_url_ok, :preferred_p24_id_sprzedawcy
 
@@ -13,7 +12,14 @@ module Spree
     preference :crc_key, :string
     preference :test_mode, :boolean, :default => false
 
+    has_many :spree_p24_payment_sources, class_name: 'Spree::P24PaymentSource'
+
     def payment_profiles_supported?
+      false
+    end
+
+    # Always create a source which references to the selected Mollie payment method.
+    def source_required?
       false
     end
 
