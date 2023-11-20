@@ -3,7 +3,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_przelewy24'
-  s.version     = '0.2.0'
+  s.version     = '1.0.0'
   s.summary     = 'Przelewy24 payment system for Spree'
   #s.description = 'Add (optional) gem description here'
   s.required_ruby_version = '>= 2.5.0'
@@ -17,13 +17,13 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
+  s.add_dependency('deface')
+  s.add_dependency('faraday')
+  s.add_dependency('openssl')
 
-  #s.add_dependency('spree_core', '>= 1.0')
-  s.add_dependency('haml')
-
-  # spree_version = '>= 3.5.0', '< 5.0'
-  # s.add_dependency 'spree_backend', spree_version
-  # s.add_dependency 'spree_core', spree_version
+  spree_version = '>= 3.6.0', '< 5.0'
+  s.add_dependency 'spree_backend', spree_version
+  s.add_dependency 'spree_core', spree_version
   # s.add_dependency 'spree_frontend', spree_version
-  # s.add_dependency 'spree_auth_devise'
+  s.add_dependency 'spree_auth_devise'
 end

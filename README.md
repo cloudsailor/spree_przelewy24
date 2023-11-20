@@ -9,7 +9,7 @@ Install
 
 Add to your Gemfile:
 
-    gem 'spree_przelewy24', :git => 'git://github.com/btolarz/spree_przelewy24.git'
+    gem 'spree_przelewy24', git: 'git://github.com/cloudsailor/spree_przelewy24.git', branch: 'release-1.0.0'
 
 and run
 

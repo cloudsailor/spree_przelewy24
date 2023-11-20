@@ -1,23 +1,5 @@
 ---
 pl:
   przelewy24:
-    info: "Kontynuuj, aby zapłacić przy użyciu serwisu Płatności24"
-    choose_channel: "Wybierz kanał płatności poniżej i kliknij dalej, aby przetworzyć płatność"
-    error:
-      headline: "Błąd w przetwarzaniu płatności"
-      content: "Niestety wystąpił błąd w przetwarzaniu płatności przez Przelewy24.pl lub zostało ono anulowane - prosimy spróbować ponownie. W razie powtarzających się problemów, prosimy o kontakt."
-      order_comeback: "Powrót do zamówienia"
-      error_code: "Kod błędu:"
-      error_description: "Opis błędu:"
-  payment_success: Płatność poprawna
-  currency: Waluta
-  p24_id_sprzedawcy: ID sprzedawcy
-  przelewy24_payment: Zapłać w Przelewy24
-  url: URL
-  language: Język
-  Address: Adres
-  Delivery: Dostawa
-  Payment: Płatność
-  Confirm: Potwierdzenie
-  Complete: Koniec
-  
+    info: 'Kontynuuj, aby zapłacić przy użyciu serwisu Płatności24'
+    redirect_to_payment: 'Przekieruj do płatności'

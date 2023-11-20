@@ -1,6 +1,7 @@
 module SpreePrzelewy24
   class Engine < Rails::Engine
     require 'spree/core'
+    require 'deface'
     engine_name 'spree_przelewy24'
 
     isolate_namespace SpreePrzelewy24Gateway
@@ -13,27 +14,18 @@ module SpreePrzelewy24
 
     def self.activate
       if self.frontend_available?
-        Dir.glob(File.join(File.dirname(__FILE__), '../../lib/spree_frontend/controllers/spree/*_decorator*.rb')) do |c|
+        Dir.glob(File.join(File.dirname(__FILE__), '../../app/overrides/*.rb')) do |c|
           Rails.application.config.cache_classes ? require(c) : load(c)
         end
       end
 
-      Spree::PermittedAttributes.source_attributes << :payment_method_name
-      Spree::PermittedAttributes.source_attributes << :issuer
-
-      # Orders should be shippable whenever they're authorized
-      Spree::Config[:auto_capture_on_dispatch] = true
+      Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
+        Rails.configuration.cache_classes ? require(c) : load(c)
+      end
     end
 
     def self.frontend_available?
       @@frontend_available ||= ::Rails::Engine.subclasses.map(&:instance).map{ |e| e.class.to_s }.include?('Spree::Frontend::Engine')
-    end
-
-    paths['app/controllers'] << 'lib/controllers'
-
-    if self.frontend_available?
-      paths["app/controllers"] << "lib/spree_frontend/controllers"
-      paths["app/views"] << "lib/views/frontend"
     end
 
     config.to_prepare &method(:activate).to_proc
