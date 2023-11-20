@@ -1,0 +1,6 @@
+<div class="mt-1" id="p24_box">
+  <%- payment = @order.payments.last %>
+  <% if @order.complete? && payment.present? && payment.payment_method.is_a?(Spree::Gateway::Przelewy24) && payment.private_metadata['p24_token']&.present? %>
+    <%= link_to t('przelewy24.redirect_to_payment'), "#{payment.payment_method.post_url(payment.private_metadata['p24_token']) }" %>
+  <%end %>
+</div>
