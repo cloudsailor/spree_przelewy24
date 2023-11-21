@@ -83,7 +83,7 @@ module Spree
       end
     end
 
-    def verify_transaction(order, payment, session_id, amount, currency, p24_order_id)
+    def verify_transaction(order, payment, session_id, amount, currency, p24_order_id, p24_statement)
       return false if order.blank? || payment.blank? || session_id.blank? || amount.blank? || currency.blank? || p24_order_id.blank?
 
       float_amount = (amount / 100)&.to_f
@@ -97,13 +97,15 @@ module Spree
         req.body = verify_transaction_payload(session_id, amount, currency, p24_order_id).to_json
       end
 
-      puts response.body.inspect
       if response.success?
-        response_body = JSON.parse(response.body)
-        payment.started_processing
         payment.amount = float_amount
         payment.complete
-        payment.update(private_metadata: { p24_order_id: response_body['orderId'] })
+        private_metadata = payment.private_metadata
+        private_metadata[:p24_order_id] = p24_order_id
+        private_metadata[:p24_statement] = p24_statement
+        private_metadata[:p24_currency] = currency
+        private_metadata[:p24_amount] = amount
+        payment.update(private_metadata: private_metadata)
         true
       else
         false
@@ -173,12 +175,7 @@ module Spree
     end
 
     def calculate_verify_sign(session, order_id, amount, currency)
-      puts session.inspect
-      puts order_id.inspect
-      puts amount.inspect
-      puts currency.inspect
       string_to_hash = "{\"sessionId\":\"#{session}\",\"orderId\":#{order_id},\"amount\":#{amount},\"currency\":\"#{currency}\",\"crc\":\"#{preferred_p24_crc_key}\"}"
-      puts string_to_hash.inspect
       OpenSSL::Digest::SHA384.hexdigest(string_to_hash)
     end
   end

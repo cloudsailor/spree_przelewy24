@@ -6,3 +6,12 @@
 <p>
   <%= t('przelewy24.info') %>
 </p>
+<p>
+  <%= t('przelewy24.token') %>
+  <%= @payment&.private_metadata['p24_token'] %>
+</p>
+
+<p>
+  <%= t('przelewy24.url') %>
+  <%= link_to @payment.payment_method.post_url(@payment&.private_metadata['p24_token']), @payment.payment_method.post_url(@payment&.private_metadata['p24_token']), target: "_blank" %>
+</p>
