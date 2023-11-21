@@ -1,4 +1,4 @@
-module AddButtonToOrderShow
+class AddButtonToOrderShow
   Deface::Override.new(virtual_path: "spree/shared/_order_details",
                       name: "add_button_to_order_show",
                       insert_after: "div.checkout-confirm-order-details",
