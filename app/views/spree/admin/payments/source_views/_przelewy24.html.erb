@@ -12,8 +12,8 @@
 </p>
 
 <p>
-  <%=if @payment&.public_metadata.fetch('p24_token', '').present?%>
+  <% if @payment&.public_metadata.fetch('p24_token', '').present? %>
     <%= t('przelewy24.url') %>
-    <%= link_to @payment.payment_method.post_url(@payment&.public_metadata.fetch('p24_token', '')), @payment.payment_method.post_url(@payment&.private_metadata['p24_token']), target: "_blank" %>
-  <%=end %>
+    <%= link_to @payment.payment_method.post_url(@payment&.public_metadata.fetch('p24_token', '')), target: "_blank" %>
+  <% end %>
 </p>
