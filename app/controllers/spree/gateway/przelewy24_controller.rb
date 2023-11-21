@@ -3,12 +3,11 @@ module Spree
   class Gateway::Przelewy24Controller < Spree::BaseController
     skip_before_action :verify_authenticity_token, :only => [:comeback]
     include Spree::Core::ControllerHelpers::Order
-    helper 'spree/store'
 
     # Result from Przelewy24
     def comeback
       payment = Spree::Payment.find_by(number: params[:sessionId])
-      if payment&.state == 'checkout' && payment.payment_method.verify_transaction(payment.order, payment, params[:sessionId], params[:amount], params[:currency], params[:orderId])
+      if payment&.state == 'checkout' && payment.payment_method.verify_transaction(payment.order, payment, params[:sessionId], params[:amount], params[:currency], params[:orderId], params[:statement])
         head :ok
       else
         head :unprocessable_entity
