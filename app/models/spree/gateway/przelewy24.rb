@@ -36,7 +36,6 @@ module Spree
 
       MollieLogger.debug("Spree order #{order_id} has been canceled.")
       ActiveMerchant::Billing::Response.new(true, 'Spree order has been canceled.')
-      end
     end
 
     def p24_amount(amount)
