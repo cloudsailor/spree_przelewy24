@@ -31,6 +31,14 @@ module Spree
       false
     end
 
+    def cancel(order_id)
+      Rails.logger.debug("Starting cancellation for #{order_id}")
+
+      MollieLogger.debug("Spree order #{order_id} has been canceled.")
+      ActiveMerchant::Billing::Response.new(true, 'Spree order has been canceled.')
+      end
+    end
+
     def p24_amount(amount)
       (amount*100.00).to_i.to_s #total amount * 100
     end
