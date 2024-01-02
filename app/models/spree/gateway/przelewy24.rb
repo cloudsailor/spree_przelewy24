@@ -34,7 +34,7 @@ module Spree
     def cancel(order_id)
       Rails.logger.debug("Starting cancellation for #{order_id}")
 
-      MollieLogger.debug("Spree order #{order_id} has been canceled.")
+      Rails.logger.debug("Spree order #{order_id} has been canceled.")
       ActiveMerchant::Billing::Response.new(true, 'Spree order has been canceled.')
     end
 
