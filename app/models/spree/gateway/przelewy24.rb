@@ -76,7 +76,7 @@ module Spree
 
       if response.success?
         response_body = JSON.parse(response.body)
-        payment.update(private_metadata: { p24_token: response_body['data']['token'] })
+        payment.update(public_metadata: { p24_token: response_body['data']['token'], p24_payment_url: post_url(response_body['data']['token']) })
         response.body['data']['token']
       else
         nil
