@@ -11,7 +11,7 @@ module Spree::Payment::ProcessingDecorator
   private
 
   def cancel_with_p24
-    response = payment_method.cancel(payment_id)
+    response = payment_method.cancel(id)
     handle_response(response, :void, :failure)
   end
 end
