@@ -1,0 +1,19 @@
+<%
+=begin%>
+ <%= image_tag "store/logo_przelewy24.png", :alt => "Przelewy24" %> 
+<%
+=end%>
+<p>
+  <%= t('przelewy24.info') %>
+</p>
+<p>
+  <%= t('przelewy24.token') %>
+  <%= @payment&.public_metadata.fetch('p24_token', '') %>
+</p>
+
+<p>
+  <% if @payment&.public_metadata.fetch('p24_token', '').present? %>
+    <%= t('przelewy24.url') %>
+    <%= link_to @payment.payment_method.post_url(@payment&.public_metadata.fetch('p24_token', '')), target: "_blank" %>
+  <% end %>
+</p>

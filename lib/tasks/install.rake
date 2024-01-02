@@ -1,8 +1,8 @@
-namespace :spree_dotpay_pl_payment do
+namespace :spree_p24_payment do
   desc "Copies all migrations and assets (NOTE: This will be obsolete with Rails 3.1)"
   task :install do
-    Rake::Task['spree_dotpay_pl_payment:install:migrations'].invoke
-    Rake::Task['spree_dotpay_pl_payment:install:assets'].invoke
+    Rake::Task['spree_p24_payment:install:migrations'].invoke
+    Rake::Task['spree_p24_payment:install:assets'].invoke
   end
 
   namespace :install do

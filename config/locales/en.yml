@@ -1,0 +1,5 @@
+---
+en:
+  przelewy24:
+    info: 'Continue to pay using P24'
+    redirect_to_payment: 'Redirect to payment'
