@@ -39,7 +39,7 @@ module Spree
     end
 
     def p24_amount(amount)
-      (amount*100.00).to_i.to_s #total amount * 100
+      (amount&.to_f*100.00).to_i.to_s #total amount * 100
     end
 
     def post_url(token)
@@ -159,7 +159,7 @@ module Spree
         channel: preferred_p24_channel,
         waitForResult: preferred_wait_for_result,
         regulationAccept: preferred_regulation_accept,
-        shipping: order.shipment_total,
+        shipping: p24_amount(order.shipment_total),
         transferLabel: order.number,
         sign: calculate_register_sign(session_id,preferred_p24_merchant_id,p24_amount(order.total),order.currency),
         encoding: 'UTF-8',
