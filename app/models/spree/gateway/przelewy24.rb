@@ -86,6 +86,7 @@ module Spree
         payment.update(public_metadata: { p24_token: response_body['data']['token'], p24_payment_url: post_url(response_body['data']['token']) })
         response.body['data']['token']
       else
+        Rails.logger.warn("register_transaction #{order.id}, payment_id: #{payment_id} failed => #{response.inspect}")
         nil
       end
     end
@@ -115,6 +116,7 @@ module Spree
         payment.update(private_metadata: private_metadata)
         true
       else
+        Rails.logger.warn("Verify_transaction#{order.id} failed => #{response.inspect}")
         false
       end
     end
