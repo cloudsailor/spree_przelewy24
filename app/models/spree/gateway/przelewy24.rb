@@ -174,6 +174,7 @@ module Spree
     def p24_language(country_iso)
       allowed_languages = %w[bg cs de en es fr hr hu it nl pl pt se sk]
       country_iso = country_iso&.downcase
+      country_iso = 'cs' if country_iso == 'cz'
 
       allowed_languages.include?(country_iso) ? country_iso : 'en'
     end
