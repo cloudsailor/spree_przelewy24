@@ -7,7 +7,9 @@ module Spree
     # Result from Przelewy24
     def comeback
       payment = Spree::Payment.find_by(number: params[:sessionId])
-      if payment&.state == 'checkout' && payment.payment_method.verify_transaction(payment.order, payment, params[:sessionId], params[:amount], params[:currency], params[:orderId], params[:statement])
+
+      if payment&.state == 'checkout' && payment.payment_method.verify_transaction(payment.order, payment, params[:sessionId], params[:amount], params[:currency], params[:orderId], params[:statement]) && payment.order.update_with_updater!
+        payment.update(private_metadata: { 'p24_statement' => params[:statement] })
         head :ok
       else
         head :unprocessable_entity
