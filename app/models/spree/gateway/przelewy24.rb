@@ -39,7 +39,7 @@ module Spree
     end
 
     def p24_amount(amount)
-      (amount*100.00).to_i.to_s #total amount * 100
+      (amount&.to_f*100.00).to_i.to_s #total amount * 100
     end
 
     def post_url(token)
@@ -86,6 +86,7 @@ module Spree
         payment.update(public_metadata: { p24_token: response_body['data']['token'], p24_payment_url: post_url(response_body['data']['token']) })
         response.body['data']['token']
       else
+        Rails.logger.warn("register_transaction #{order.id}, payment_id: #{payment_id} failed => #{response.inspect}")
         nil
       end
     end
@@ -115,6 +116,7 @@ module Spree
         payment.update(private_metadata: private_metadata)
         true
       else
+        Rails.logger.warn("Verify_transaction#{order.id} failed => #{response.inspect}")
         false
       end
     end
@@ -157,7 +159,7 @@ module Spree
         channel: preferred_p24_channel,
         waitForResult: preferred_wait_for_result,
         regulationAccept: preferred_regulation_accept,
-        shipping: order.shipment_total,
+        shipping: p24_amount(order.shipment_total),
         transferLabel: order.number,
         sign: calculate_register_sign(session_id,preferred_p24_merchant_id,p24_amount(order.total),order.currency),
         encoding: 'UTF-8',
@@ -172,6 +174,7 @@ module Spree
     def p24_language(country_iso)
       allowed_languages = %w[bg cs de en es fr hr hu it nl pl pt se sk]
       country_iso = country_iso&.downcase
+      country_iso = 'cs' if country_iso == 'cz'
 
       allowed_languages.include?(country_iso) ? country_iso : 'en'
     end
