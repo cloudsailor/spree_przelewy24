@@ -94,7 +94,7 @@ module Spree
     def verify_transaction(order, payment, session_id, amount, currency, p24_order_id, p24_statement)
       return false if order.blank? || payment.blank? || session_id.blank? || amount.blank? || currency.blank? || p24_order_id.blank?
 
-      float_amount = (amount / 100)&.to_f
+      float_amount = (amount.to_f / 100).to_f
       conn = Faraday.new(url: verify_url) do |faraday|
         faraday.adapter Faraday.default_adapter
         faraday.request :authorization, :basic, preferred_p24_pos_id, preferred_p24_report_key
