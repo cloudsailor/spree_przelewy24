@@ -1,5 +1,6 @@
 require 'openssl'
 require 'faraday'
+require 'bigdecimal'
 
 module Spree
   class Gateway::Przelewy24 < PaymentMethod
@@ -40,7 +41,7 @@ module Spree
     end
 
     def p24_amount(amount)
-      (amount&.to_f*100.00).to_i.to_s #total amount * 100
+      (BigDecimal(amount.to_s) * BigDecimal('100')).to_i.to_s
     end
 
     def post_url(token)
