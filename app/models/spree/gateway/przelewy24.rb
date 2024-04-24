@@ -52,6 +52,16 @@ module Spree
       end
     end
 
+    def credit(credit_cents, payment_id, options)
+      order = options[:originator].try(:payment).try(:order)
+      payment = options[:originator].try(:payment)
+      reimbursement = options[:originator].try(:reimbursement)
+      order_number = order.try(:number)
+      order_currency = order.try(:currency)
+
+      ActiveMerchant::Billing::Response.new(true, 'Refund successful')
+    end
+
     def transaction_url
       if preferred_test_mode
         preferred_test_url_transaction
