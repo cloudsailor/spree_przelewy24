@@ -1,5 +1,6 @@
 require 'openssl'
 require 'faraday'
+require 'bigdecimal'
 
 module Spree
   class Gateway::Przelewy24 < PaymentMethod
@@ -12,6 +13,7 @@ module Spree
     preference :test_mode, :boolean, default: false
     preference :wait_for_result, :boolean, default: true
     preference :regulation_accept, :boolean, default: false
+    preference :p24_method_id, :integer, default: 0
     preference :p24_return_url, :string, default: "http://localhost:3000"
     preference :p24_return_status_url, :string, default: "http://localhost:3000"
     preference :url, :string, default: 'https://secure.przelewy24.pl/trnRequest/'
@@ -39,7 +41,7 @@ module Spree
     end
 
     def p24_amount(amount)
-      (amount&.to_f*100.00).to_i.to_s #total amount * 100
+      (BigDecimal(amount.to_s) * BigDecimal('100')).to_i.to_s
     end
 
     def post_url(token)
@@ -48,6 +50,16 @@ module Spree
       else
         preferred_url + token
       end
+    end
+
+    def credit(credit_cents, payment_id, options)
+      order = options[:originator].try(:payment).try(:order)
+      payment = options[:originator].try(:payment)
+      reimbursement = options[:originator].try(:reimbursement)
+      order_number = order.try(:number)
+      order_currency = order.try(:currency)
+
+      ActiveMerchant::Billing::Response.new(true, 'Refund successful')
     end
 
     def transaction_url
@@ -83,7 +95,7 @@ module Spree
 
       if response.success?
         response_body = JSON.parse(response.body)
-        payment.update(public_metadata: { p24_token: response_body['data']['token'], p24_payment_url: post_url(response_body['data']['token']) })
+        payment.update(public_metadata: { p24_token: response_body['data']['token'], token: response_body['data']['token'], p24_payment_url: post_url(response_body['data']['token']), payment_url: post_url(response_body['data']['token'])  })
         response.body['data']['token']
       else
         Rails.logger.warn("register_transaction #{order.id}, payment_id: #{payment_id} failed => #{response.inspect}")
@@ -152,7 +164,7 @@ module Spree
         country: order.billing_address.country.iso,
         phone: order.billing_address.phone,
         language: p24_language(order.billing_address.country.iso),
-        method: 0,
+        method: preferred_p24_method_id,
         urlReturn: preferred_p24_return_url,
         urlStatus: "#{preferred_p24_return_status_url}/gateway/przelewy24/comeback/#{gateway_id}/#{order.id}",
         timeLimit: preferred_p24_time_limit,
