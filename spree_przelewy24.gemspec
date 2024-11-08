@@ -3,7 +3,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_przelewy24'
-  s.version     = '1.0.0'
+  s.version     = '1.3.0'
   s.summary     = 'Przelewy24 payment system for Spree'
   #s.description = 'Add (optional) gem description here'
   s.required_ruby_version = '>= 2.5.0'
