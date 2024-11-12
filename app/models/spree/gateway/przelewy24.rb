@@ -200,5 +200,31 @@ module Spree
       string_to_hash = "{\"sessionId\":\"#{session}\",\"orderId\":#{order_id},\"amount\":#{amount},\"currency\":\"#{currency}\",\"crc\":\"#{preferred_p24_crc_key}\"}"
       OpenSSL::Digest::SHA384.hexdigest(string_to_hash)
     end
+
+    def actions
+      %w[capture void]
+    end
+
+    def can_capture?(payment)
+      %w[checkout pending].include?(payment.state)
+    end
+
+    def can_void?(payment)
+      payment.state != 'void'
+    end
+
+    def capture(*)
+      simulated_successful_billing_response
+    end
+
+    def void(*)
+      simulated_successful_billing_response
+    end
+
+    private
+
+    def simulated_successful_billing_response
+      ActiveMerchant::Billing::Response.new(true, '', {}, {})
+    end
   end
 end
